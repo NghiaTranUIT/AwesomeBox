@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Register for in case of fire!</title>
+    <link rel="stylesheet" href="css/home.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $.getJSON( "/projects", function( data ) {
+          $.each( data["paths"], function(key, val ) {
+           $(
+              '<form action="/remove" method="post" name="sign up for new user">' +
+              '<div class="input">' +
+              '<input type="text" class="button" id="email" name="path" value="'+ val +'">' +
+              '<input type="submit" class="button" id="submit" value="REMOVE">' +
+              "</div>" +
+              '</form>'
+            ).appendTo( ".in-case-of-fire" );
+          });
+        });
+    });
+    </script>
+  </head>
+  <body>
+    
+    <div class="in-case-header">
+        <p>In case of fire!</p>
+    </div>
+    <div class="in-case-of-fire">
+    </div>
+
+    <form class="submit-form" action="/home" method="post" name="sign up for new user">
+      <div class="header">
+         <p>Add more project</p>
+      </div>
+      <div class="description">
+        <p>When on fire, you do not have enough time to submit your code, let me help you :D</p>
+      </div>
+      <div class="input">
+        <input type="text" class="button" id="email" name="path" placeholder="Project path">
+        <input type="submit" class="button" id="submit" value="SUBMIT!">
+      </div>
+    </form>
+  </body>
+</html>
