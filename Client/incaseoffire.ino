@@ -86,9 +86,9 @@ void loop() {
     digitalWrite(led2, HIGH);
 
     // Request path and body can be set at runtime or at setup.
-    request.hostname = "cherry.lozi.vn";
-    request.port = 9000;
-    request.path = "/";
+    request.hostname = "172.20.10.2";
+    request.port = 10000;
+    request.path = "/in-case-of-fire";
 
     // The library also supports sending a body with your request:
     //request.body = "{\"key\":\"value\"}";
@@ -102,7 +102,7 @@ void loop() {
     Serial.println(response.body);
 
 // Push IFTTT
-    Spark.publish("Fire", "Post Twitter");
+   // Spark.publish("Fire", "Post Twitter");
 
     nextTime = millis() + 10000;
   }
