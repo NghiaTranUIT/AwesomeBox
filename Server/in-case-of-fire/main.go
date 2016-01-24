@@ -14,6 +14,10 @@ import (
 	"strings"
 )
 
+const (
+	username = "NghiaTran"
+)
+
 func main() {
 	h := Handle{}
 	router := gin.Default()
@@ -21,6 +25,9 @@ func main() {
 	// For static and html file
 	router.Static("/css", "css")
 	router.LoadHTMLGlob("html/*")
+
+	// Home page
+	router.GET("/", h.Home)
 
 	// Home page
 	router.GET("/home", h.Home)
@@ -60,12 +67,12 @@ func (h *Handle) Remove(c *gin.Context) {
 	}
 	path := Path{}
 	c.Bind(&path)
-	removeProjects(path.Path)
+	removeProjects(path.Path, c)
 	c.HTML(http.StatusOK, "home.html", nil)
 }
 
 func (h *Handle) InCaseOfFire(c *gin.Context) {
-	go SaveYourLife("huypham")
+	go SaveYourLife(username)
 	c.String(200, "Okie")
 }
 
@@ -75,8 +82,8 @@ func (h *Handle) RegisterProject(c *gin.Context) {
 	}
 	path := Path{}
 	c.Bind(&path)
-	paths := appendProjects(path.Path)
-	CreateSaveScript("huypham", "10.37.129.2", paths)
+	paths := appendProjects(path.Path, c)
+	CreateSaveScript(username, getIP(c), paths)
 	c.HTML(http.StatusOK, "home.html", nil)
 }
 
@@ -90,8 +97,14 @@ func (h *Handle) GetProject(c *gin.Context) {
 	c.JSON(200, gin.H{"paths": paths})
 }
 
+func getIP(c *gin.Context) string {
+	iPArray := strings.Split(c.ClientIP(), ":")
+	pureIp := iPArray[0]
+	return pureIp
+}
+
 // Helper function
-func appendProjects(path string) []string {
+func appendProjects(path string, c *gin.Context) []string {
 	filename := "projects"
 	content, _ := ioutil.ReadFile(filename)
 	f, err := os.Create(filename)
@@ -120,11 +133,11 @@ func appendProjects(path string) []string {
 		fmt.Println(n, err)
 	}
 	f.Close()
-	CreateSaveScript("huypham", "", newPaths)
+	CreateSaveScript(username, getIP(c), newPaths)
 	return newPaths
 }
 
-func removeProjects(removePath string) []string {
+func removeProjects(removePath string, c *gin.Context) []string {
 	filename := "projects"
 	content, _ := ioutil.ReadFile(filename)
 	f, err := os.Create(filename)
@@ -144,7 +157,7 @@ func removeProjects(removePath string) []string {
 		fmt.Println(n, err)
 	}
 	f.Close()
-	CreateSaveScript("huypham", "", newPaths)
+	CreateSaveScript(username, getIP(c), newPaths)
 	return newPaths
 }
 
